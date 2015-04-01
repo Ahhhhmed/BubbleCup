@@ -12,8 +12,8 @@
 
 int tryToFit(double W, double H, char* s, double size)
 {
-	//initialise helper variables
-	int rowLength = -1;
+	//Initialize helper variables
+	int rowLength = -1; // -1 because adding first word adds a space
 	int row = 1;
 	int wordLength;
 
@@ -69,7 +69,7 @@ int main()
 	double W, H; // Width, Height
 	char* s = malloc((MAX_LENGTH+1)*sizeof(char));
 
-	//read from standard imput
+	//read from standard input
 	readline(s);
 	sscanf(s,"%lf %lf", &W, &H);
 	readline(s);
