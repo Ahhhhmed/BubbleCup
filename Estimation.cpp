@@ -48,19 +48,19 @@ void avg(int i, int j, double* outResault, int** outResaultInt)
 {
 	if (i == 0) {
 		*outResault = ((double) s[j - 1]) / j;
-		if(outResaultInt && s[j-1] % j == 0){
+		if(outResaultInt == NULL) return;
+		if(s[j-1] % j == 0){
 			**outResaultInt = s[j - 1] / j;
 		}
-		else
-			outResaultInt = NULL;
+		else *outResaultInt = NULL;
 		return;
 	}
 	*outResault = ((double) (s[j - 1] - s[i - 1])) / (j - i);
-	if(outResaultInt && s[j - 1] - s[i - 1] % j - i == 0){
+	if(outResaultInt == NULL) return;
+	if(s[j - 1] - s[i - 1] % j - i == 0){
 		**outResaultInt = s[j - 1] - s[i - 1] / j - i;
 	}
-	else
-		outResaultInt = NULL;
+	else *outResaultInt = NULL;
 }
 
 
@@ -161,9 +161,9 @@ int solve(int n, int k)
 
 		//extend interval
 		for (int j = i + 1; j < n; j++){
-			int* noviAvgInt;
-			double* noviAvg;
-			double* stariAvg;
+			int* noviAvgInt = new int();
+			double* noviAvg = new double();
+			double* stariAvg = new double();
 			avg(i, j, stariAvg, NULL);
 			avg(i, j + 1, noviAvg, &noviAvgInt);
 			Greska = dodajSmrada(count,
