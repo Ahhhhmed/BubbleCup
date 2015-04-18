@@ -44,10 +44,23 @@ double calculateError(int min, int max)
 
 
 //calculate average between i(included) and j(excluded) in array a
-double avg(int i, int j)
+void avg(int i, int j, double* outResault, int** outResaultInt)
 {
-	if (i == 0) return ((double) s[j - 1]) / j;
-	return ((double) (s[j - 1] - s[i - 1])) / (j - i);
+	if (i == 0) {
+		*outResault = ((double) s[j - 1]) / j;
+		if(outResaultInt && s[j-1] % j == 0){
+			**outResaultInt = s[j - 1] / j;
+		}
+		else
+			outResaultInt = NULL;
+		return;
+	}
+	*outResault = ((double) (s[j - 1] - s[i - 1])) / (j - i);
+	if(outResaultInt && s[j - 1] - s[i - 1] % j - i == 0){
+		**outResaultInt = s[j - 1] - s[i - 1] / j - i;
+	}
+	else
+		outResaultInt = NULL;
 }
 
 
@@ -58,6 +71,7 @@ double dodajSmrada(map<int,int>* kolkoIhIma,
 			       int* tacnoStariAvg,
 			       double stariAvg,
 			       double noviAvg,
+			       int* noviAvgInt,
 			       int krajIntervala,
 			       double Greska)
 {
@@ -85,8 +99,8 @@ double dodajSmrada(map<int,int>* kolkoIhIma,
 			*ispod = *ispod + kolkoIhJeIzmedju;
 			*ispod += *tacnoStariAvg;
 
-			if (ceil(noviAvg) == noviAvg && kolkoIhIma->find((int) noviAvg)!=kolkoIhIma->end())
-				*tacnoStariAvg = (*kolkoIhIma)[((int) noviAvg)];
+			if (noviAvgInt && kolkoIhIma->find(*noviAvgInt)!=kolkoIhIma->end())
+				*tacnoStariAvg = (*kolkoIhIma)[(*noviAvgInt)];
 			else
 				*tacnoStariAvg = 0;
 
@@ -102,8 +116,8 @@ double dodajSmrada(map<int,int>* kolkoIhIma,
 			*ispod = *ispod - kolkoIhJeIzmedju;
 			*iznad += *tacnoStariAvg;
 
-            if (ceil(noviAvg) == noviAvg && kolkoIhIma->find((int) noviAvg)!=kolkoIhIma->end())
-                *tacnoStariAvg = (*kolkoIhIma)[(int) noviAvg];
+            if (noviAvgInt && kolkoIhIma->find(*noviAvgInt)!=kolkoIhIma->end())
+                *tacnoStariAvg = (*kolkoIhIma)[*noviAvgInt];
             else
                 *tacnoStariAvg = 0;
 
@@ -147,12 +161,18 @@ int solve(int n, int k)
 
 		//extend interval
 		for (int j = i + 1; j < n; j++){
+			int* noviAvgInt;
+			double* noviAvg;
+			double* stariAvg;
+			avg(i, j, stariAvg, NULL);
+			avg(i, j + 1, noviAvg, &noviAvgInt);
 			Greska = dodajSmrada(count,
 								 &iznad,
 								 &ispod,
 								 &tacnoStariAvg,
-								 avg(i, j),
-								 avg(i, j + 1),
+								 *stariAvg,
+								 *noviAvg,
+								 noviAvgInt,
 								 j,
 								 Greska);
 			minimumError[i][j+1] = Greska;
