@@ -133,7 +133,7 @@ double dodajSmrada(map<int,int>* kolkoIhIma,
         (*kolkoIhIma)[a[krajIntervala]] = 1;
 
 	if (a[krajIntervala] == noviAvg)
-		*tacnoStariAvg++;
+		(*tacnoStariAvg)++;
 	else if (a[krajIntervala] < noviAvg)
 		(*ispod)++;
 	else
